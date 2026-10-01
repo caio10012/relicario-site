@@ -230,10 +230,16 @@
 
   /* ── Feature rows ── */
   .feature-row {
-    display: grid; grid-template-columns: 1fr 1.05fr; gap: 56px; align-items: center;
+    display: grid; grid-template-columns: 0.8fr 1.3fr; gap: 56px; align-items: center;
     padding: 64px 0;
     border-top: 1px solid var(--border);
   }
+  /* A imagem sempre fica na coluna mais larga (1.3fr), mesmo nas linhas
+     invertidas: como o "order" também reordena a faixa de auto-posicionamento
+     do grid (não só a pintura visual), a linha invertida precisa inverter
+     também as larguras das colunas, senão o texto é que ganharia a coluna
+     larga e a imagem ficaria espremida. */
+  .feature-row.reverse { grid-template-columns: 1.3fr 0.8fr; }
   .feature-row.reverse .feature-row-text { order: 2; }
   .feature-row.reverse .feature-row-shot { order: 1; }
   .feature-row-text h3 { font-size: 1.4rem; margin: 10px 0 14px; }
