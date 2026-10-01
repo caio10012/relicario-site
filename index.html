@@ -262,8 +262,9 @@
     <div class="wrap-narrow">
       <div class="ornament">Comece agora</div>
       <h2 style="font-size: 1.7rem; margin-bottom: 26px;">Baixe o Relicário</h2>
-      <a class="btn" href="https://github.com/caio10012/relicario-site/releases/latest">Baixar a versão mais recente</a>
-      <p class="platforms">Windows · macOS · Linux</p>
+      <a class="btn" id="download-btn" href="https://github.com/caio10012/relicario-site/releases/latest">Baixar a versão mais recente</a>
+      <p class="platforms" id="download-sub">Windows · macOS · Linux</p>
+      <p class="note" id="other-platforms"></p>
       <p class="note">O Relicário é gratuito. Sem anúncios, sem conta obrigatória, sem assinatura.</p>
     </div>
   </section>
@@ -272,6 +273,84 @@
     <div class="ornament" style="margin-bottom: 10px;"></div>
     Feito por Caio Fontes.
   </footer>
+
+  <script>
+    // Detecta o SO e troca o botão principal pro instalador certo, buscando
+    // sempre o release mais recente de verdade via API do GitHub — assim
+    // não precisa editar o site a cada versão nova. Se a chamada falhar
+    // (offline, rate limit), o botão continua funcionando: ele já nasce
+    // apontando pra página normal de Releases no HTML acima.
+    (function () {
+      var REPO = "caio10012/relicario-site";
+      var btn   = document.getElementById("download-btn");
+      var sub   = document.getElementById("download-sub");
+      var other = document.getElementById("other-platforms");
+
+      function detectOS() {
+        var ua = navigator.userAgent;
+        if (/Win/i.test(ua)) return "windows";
+        if (/Mac/i.test(ua)) return "mac";
+        if (/Linux/i.test(ua) && !/Android/i.test(ua)) return "linux";
+        return null;
+      }
+
+      function pick(assets, re) {
+        for (var i = 0; i < assets.length; i++) {
+          if (re.test(assets[i].name)) return assets[i];
+        }
+        return null;
+      }
+
+      fetch("https://api.github.com/repos/" + REPO + "/releases/latest")
+        .then(function (r) {
+          if (!r.ok) throw new Error("falha ao consultar releases");
+          return r.json();
+        })
+        .then(function (release) {
+          var assets = release.assets || [];
+          var os = detectOS();
+          var primary = null;
+          var label = "Baixar a versão mais recente";
+
+          if (os === "windows") {
+            primary = pick(assets, /setup\.exe$/i) || pick(assets, /\.msi$/i);
+            label = "Baixar para Windows";
+          } else if (os === "mac") {
+            primary = pick(assets, /\.dmg$/i);
+            label = "Baixar para macOS";
+          } else if (os === "linux") {
+            primary = pick(assets, /\.AppImage$/i);
+            label = "Baixar para Linux";
+          }
+
+          if (primary) {
+            btn.href = primary.browser_download_url;
+            btn.textContent = label;
+          }
+
+          var version = (release.tag_name || "").replace(/^v/, "");
+          sub.textContent = (version ? "Versão " + version + " · " : "") + "Windows · macOS · Linux";
+
+          var groups = [
+            { re: /setup\.exe$/i },
+            { re: /\.msi$/i },
+            { re: /\.dmg$/i },
+            { re: /\.AppImage$/i },
+            { re: /\.deb$/i },
+            { re: /\.rpm$/i },
+          ];
+          var links = [];
+          groups.forEach(function (g) {
+            var a = pick(assets, g.re);
+            if (a) links.push('<a href="' + a.browser_download_url + '">' + a.name + '</a>');
+          });
+          if (links.length) other.innerHTML = "Outros formatos: " + links.join(" · ");
+        })
+        .catch(function () {
+          // Sem sorte na API — o botão continua com o link padrão de /releases/latest.
+        });
+    })();
+  </script>
 
 </body>
 </html>
