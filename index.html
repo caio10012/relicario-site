@@ -318,15 +318,28 @@
   .heading-row h3 { margin: 0; }
 
   /* ── Constelação (seção "também vem junto") ── */
-  .constellation { display: block; width: 100%; max-width: 420px; height: auto; margin: 0 auto 10px; opacity: 0.8; }
-  .constellation .star { opacity: 0; transform-box: fill-box; transform-origin: center; }
-  .constellation.is-visible .star { animation: star-fade 0.6s ease forwards; }
-  .constellation .line {
-    stroke-dasharray: 600; stroke-dashoffset: 600;
+  .constellation-caption {
+    text-align: center; font-size: 0.78rem; color: var(--text-dim); font-style: italic;
+    margin: 0 0 6px;
   }
-  .constellation.is-visible .line { animation: line-draw 1.1s ease-out forwards; }
+  .constellation { display: block; width: 100%; height: auto; margin: 0 auto; opacity: 0.9; cursor: crosshair; }
+  .constellation .star { opacity: 0; transform-box: fill-box; transform-origin: center; }
+  .constellation.is-visible .star[data-seed] { animation: star-fade 0.6s ease forwards; }
+  .constellation .line {
+    stroke-dasharray: 900; stroke-dashoffset: 900;
+  }
+  .constellation.is-visible .line[data-seed] { animation: line-draw 1.1s ease-out forwards; }
+  .constellation .star.is-new  { animation: star-fade 0.5s ease forwards; }
+  .constellation .line.is-new  { animation: line-draw 0.5s ease-out forwards; }
   @keyframes star-fade { from { opacity: 0; transform: scale(0.3); } to { opacity: 1; transform: scale(1); } }
   @keyframes line-draw { to { stroke-dashoffset: 0; } }
+  .constellation-reset {
+    text-align: center; margin: 10px 0 0;
+  }
+  .constellation-reset a {
+    font-size: 0.74rem; color: var(--text-dim); text-decoration: none; border-bottom: 1px dotted var(--border);
+  }
+  .constellation-reset a:hover { color: var(--gold-dim); }
 </style>
 </head>
 <body>
@@ -547,19 +560,25 @@
 
   <section class="more">
     <div class="wrap">
-      <svg class="constellation js-reveal-once" viewBox="0 0 400 100" xmlns="http://www.w3.org/2000/svg">
-        <line class="line" x1="20" y1="80" x2="90" y2="55" stroke="#D4AF37" stroke-width="0.8" />
-        <line class="line" x1="90" y1="55" x2="160" y2="65" stroke="#D4AF37" stroke-width="0.8" style="animation-delay: 0.15s;" />
-        <line class="line" x1="160" y1="65" x2="230" y2="30" stroke="#D4AF37" stroke-width="0.8" style="animation-delay: 0.3s;" />
-        <line class="line" x1="230" y1="30" x2="300" y2="40" stroke="#D4AF37" stroke-width="0.8" style="animation-delay: 0.45s;" />
-        <line class="line" x1="300" y1="40" x2="370" y2="15" stroke="#D4AF37" stroke-width="0.8" style="animation-delay: 0.6s;" />
-        <circle class="star" cx="20"  cy="80" r="3" fill="#D4AF37" style="animation-delay: 0.1s;" />
-        <circle class="star" cx="90"  cy="55" r="2.4" fill="#D4AF37" style="animation-delay: 0.25s;" />
-        <circle class="star" cx="160" cy="65" r="2.4" fill="#4A90E2" style="animation-delay: 0.4s;" />
-        <circle class="star" cx="230" cy="30" r="2.8" fill="#D4AF37" style="animation-delay: 0.55s;" />
-        <circle class="star" cx="300" cy="40" r="2.4" fill="#4A90E2" style="animation-delay: 0.7s;" />
-        <circle class="star" cx="370" cy="15" r="3.4" fill="#D4AF37" style="animation-delay: 0.85s;" />
+      <p class="constellation-caption">Toque em qualquer ponto vazio pra acender uma estrela na sua própria constelação</p>
+      <svg class="constellation js-reveal-once" id="constellation" viewBox="0 0 800 220" xmlns="http://www.w3.org/2000/svg">
+        <g id="constellation-lines">
+          <line class="line" data-seed="1" x1="40" y1="170" x2="180" y2="120" stroke="#D4AF37" stroke-width="1" />
+          <line class="line" data-seed="1" x1="180" y1="120" x2="320" y2="145" stroke="#D4AF37" stroke-width="1" style="animation-delay: 0.15s;" />
+          <line class="line" data-seed="1" x1="320" y1="145" x2="460" y2="70" stroke="#D4AF37" stroke-width="1" style="animation-delay: 0.3s;" />
+          <line class="line" data-seed="1" x1="460" y1="70" x2="600" y2="95" stroke="#D4AF37" stroke-width="1" style="animation-delay: 0.45s;" />
+          <line class="line" data-seed="1" x1="600" y1="95" x2="740" y2="40" stroke="#D4AF37" stroke-width="1" style="animation-delay: 0.6s;" />
+        </g>
+        <g id="constellation-stars">
+          <circle class="star" data-seed="1" cx="40"  cy="170" r="3.6" fill="#D4AF37" style="animation-delay: 0.1s;" />
+          <circle class="star" data-seed="1" cx="180" cy="120" r="3"   fill="#D4AF37" style="animation-delay: 0.25s;" />
+          <circle class="star" data-seed="1" cx="320" cy="145" r="3"   fill="#4A90E2" style="animation-delay: 0.4s;" />
+          <circle class="star" data-seed="1" cx="460" cy="70"  r="3.4" fill="#D4AF37" style="animation-delay: 0.55s;" />
+          <circle class="star" data-seed="1" cx="600" cy="95"  r="3"   fill="#4A90E2" style="animation-delay: 0.7s;" />
+          <circle class="star" data-seed="1" cx="740" cy="40"  r="4"   fill="#D4AF37" style="animation-delay: 0.85s;" />
+        </g>
       </svg>
+      <p class="constellation-reset"><a href="#" id="constellation-reset-link">Reiniciar constelação</a></p>
       <div class="ornament">Também vem junto</div>
       <div class="more-grid">
         <div class="more-item">
@@ -672,6 +691,85 @@
       document.querySelectorAll(".js-reveal-once").forEach(function (el) {
         observer.observe(el);
       });
+    })();
+
+    // Constelação interativa: clicar em qualquer ponto vazio acende uma
+    // estrela nova, ligada por uma linha à estrela mais próxima já existente
+    // (as 6 estrelas originais ou qualquer uma adicionada antes). Cada clique
+    // literalmente desenha mais um pedaço da constelação da pessoa.
+    (function () {
+      var svg = document.getElementById("constellation");
+      if (!svg) return;
+      var linesGroup = document.getElementById("constellation-lines");
+      var starsGroup = document.getElementById("constellation-stars");
+      var resetLink  = document.getElementById("constellation-reset-link");
+      var SVG_NS = "http://www.w3.org/2000/svg";
+      var MAX_STARS = 60;
+      var COLORS = ["#D4AF37", "#D4AF37", "#4A90E2"]; // dourado mais frequente que azul
+
+      var seedPositions = Array.prototype.map.call(
+        svg.querySelectorAll(".star[data-seed]"),
+        function (el) { return { x: parseFloat(el.getAttribute("cx")), y: parseFloat(el.getAttribute("cy")) }; }
+      );
+      var stars = seedPositions.slice();
+
+      function toSvgPoint(clientX, clientY) {
+        var pt = svg.createSVGPoint();
+        pt.x = clientX; pt.y = clientY;
+        var ctm = svg.getScreenCTM();
+        if (!ctm) return null;
+        return pt.matrixTransform(ctm.inverse());
+      }
+
+      function nearestStar(x, y) {
+        var best = null, bestDist = Infinity;
+        stars.forEach(function (s) {
+          var d = Math.hypot(s.x - x, s.y - y);
+          if (d < bestDist) { bestDist = d; best = s; }
+        });
+        return best;
+      }
+
+      function addStar(x, y) {
+        if (stars.length >= MAX_STARS) return;
+        var near = nearestStar(x, y);
+
+        if (near) {
+          var line = document.createElementNS(SVG_NS, "line");
+          line.setAttribute("x1", near.x); line.setAttribute("y1", near.y);
+          line.setAttribute("x2", x); line.setAttribute("y2", y);
+          line.setAttribute("stroke", "#D4AF37");
+          line.setAttribute("stroke-width", "1");
+          line.setAttribute("class", "line is-new");
+          linesGroup.appendChild(line);
+        }
+
+        var star = document.createElementNS(SVG_NS, "circle");
+        star.setAttribute("cx", x); star.setAttribute("cy", y);
+        star.setAttribute("r", (2.6 + Math.random() * 1.4).toFixed(1));
+        star.setAttribute("fill", COLORS[Math.floor(Math.random() * COLORS.length)]);
+        star.setAttribute("class", "star is-new");
+        starsGroup.appendChild(star);
+
+        stars.push({ x: x, y: y });
+      }
+
+      svg.addEventListener("click", function (e) {
+        if (e.target.classList && e.target.classList.contains("star")) return;
+        var pt = toSvgPoint(e.clientX, e.clientY);
+        if (!pt) return;
+        addStar(pt.x, pt.y);
+      });
+
+      if (resetLink) {
+        resetLink.addEventListener("click", function (e) {
+          e.preventDefault();
+          Array.prototype.slice.call(svg.querySelectorAll(".is-new")).forEach(function (el) {
+            el.parentNode.removeChild(el);
+          });
+          stars = seedPositions.slice();
+        });
+      }
     })();
 
     // Alterna entre tema escuro (grimório) e claro (pergaminho), lembrando a escolha.
