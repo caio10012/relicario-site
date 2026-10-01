@@ -320,10 +320,6 @@
   .heading-row h3 { margin: 0; }
 
   /* ── Constelação (seção "também vem junto") ── */
-  .constellation-caption {
-    text-align: center; font-size: 0.78rem; color: var(--text-dim); font-style: italic;
-    margin: 0 0 6px;
-  }
   .constellation { display: block; width: 100%; height: auto; margin: 0 auto; opacity: 0.9; cursor: crosshair; }
   .constellation .star { opacity: 0; transform-box: fill-box; transform-origin: center; }
   .constellation.is-visible .star[data-seed] { animation: star-fade 0.6s ease forwards; }
@@ -335,13 +331,6 @@
   .constellation .line.is-new  { animation: line-draw 0.5s ease-out forwards; }
   @keyframes star-fade { from { opacity: 0; transform: scale(0.3); } to { opacity: 1; transform: scale(1); } }
   @keyframes line-draw { to { stroke-dashoffset: 0; } }
-  .constellation-reset {
-    text-align: center; margin: 10px 0 0;
-  }
-  .constellation-reset a {
-    font-size: 0.74rem; color: var(--text-dim); text-decoration: none; border-bottom: 1px dotted var(--border);
-  }
-  .constellation-reset a:hover { color: var(--gold-dim); }
 </style>
 </head>
 <body>
@@ -562,7 +551,6 @@
 
   <section class="more">
     <div class="wrap">
-      <p class="constellation-caption">Toque em qualquer ponto vazio pra acender uma estrela na sua própria constelação</p>
       <svg class="constellation js-reveal-once" id="constellation" viewBox="0 0 800 220" xmlns="http://www.w3.org/2000/svg">
         <g id="constellation-lines">
           <line class="line" data-seed="1" x1="40" y1="170" x2="180" y2="120" stroke="#D4AF37" stroke-width="1" />
@@ -580,7 +568,6 @@
           <circle class="star" data-seed="1" cx="740" cy="40"  r="4"   fill="#D4AF37" style="animation-delay: 0.85s;" />
         </g>
       </svg>
-      <p class="constellation-reset"><a href="#" id="constellation-reset-link">Reiniciar constelação</a></p>
       <div class="ornament">Também vem junto</div>
       <div class="more-grid">
         <div class="more-item">
