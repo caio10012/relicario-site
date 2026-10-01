@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Relicário — seu grimório de leitura</title>
+<meta name="description" content="Relicário é um leitor de ebooks gratuito e offline que transforma cada livro lido em progresso de personagem: XP, níveis, conquistas e estatísticas de leitura." />
+
+<meta property="og:title" content="Relicário — seu grimório de leitura" />
+<meta property="og:description" content="Leitor de ebooks gratuito, offline, com EPUB/PDF, narração, estatísticas e um sistema de progressão RPG." />
+<meta property="og:image" content="assets/logo.png" />
+<meta property="og:type" content="website" />
+
+<link rel="icon" type="image/png" href="assets/favicon.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Crimson+Pro:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
+
+<style>
+  :root {
+    --gold: #D4AF37;
+    --gold-dim: rgba(212,175,55,0.55);
+    --gold-faint: rgba(212,175,55,0.18);
+    --bg: #0e0b07;
+    --bg-panel: rgba(255,255,255,0.03);
+    --border: rgba(212,175,55,0.16);
+    --text: #e8ddc4;
+    --text-dim: #a89878;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background:
+      repeating-linear-gradient(91deg, transparent 0px, transparent 8px, rgba(255,200,80,0.004) 8px, rgba(255,200,80,0.004) 9px),
+      repeating-linear-gradient(176deg, transparent 0px, transparent 18px, rgba(0,0,0,0.10) 18px, rgba(0,0,0,0.10) 19px),
+      var(--bg);
+    color: var(--text);
+    font-family: "Crimson Pro", Georgia, serif;
+    line-height: 1.6;
+  }
+
+  h1, h2, h3, .cinzel {
+    font-family: "Cinzel", serif;
+    letter-spacing: 0.04em;
+    color: var(--gold);
+    margin: 0;
+  }
+
+  a { color: var(--gold); }
+
+  .wrap {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* ── Hero ── */
+  .hero {
+    padding: 90px 0 60px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 0%, rgba(212,175,55,0.10) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .hero img {
+    width: 96px;
+    height: 96px;
+    image-rendering: -webkit-optimize-contrast;
+    filter: drop-shadow(0 0 24px rgba(212,175,55,0.35));
+    margin-bottom: 20px;
+  }
+  .hero h1 {
+    font-size: clamp(2.2rem, 6vw, 3.2rem);
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+  .hero .tagline {
+    margin-top: 14px;
+    font-size: 1.15rem;
+    color: var(--text-dim);
+    font-style: italic;
+    max-width: 520px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .hero .cta-row {
+    margin-top: 34px;
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    display: inline-block;
+    font-family: "Cinzel", serif;
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 13px 28px;
+    border-radius: 4px;
+    border: 1px solid var(--gold-dim);
+    color: var(--gold);
+    background: linear-gradient(180deg, rgba(212,175,55,0.14), rgba(212,175,55,0.03));
+    transition: all 0.2s ease;
+  }
+  .btn:hover { background: rgba(212,175,55,0.22); border-color: var(--gold); }
+  .btn.secondary {
+    color: var(--text-dim);
+    border-color: var(--border);
+    background: transparent;
+  }
+  .btn.secondary:hover { color: var(--text); border-color: var(--gold-dim); }
+
+  /* ── Section ── */
+  section { padding: 56px 0; }
+  .divider {
+    width: 60px; height: 1px; margin: 0 auto;
+    background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
+  }
+  .section-title {
+    text-align: center;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    color: var(--gold-dim);
+    margin-bottom: 10px;
+  }
+  .section-heading {
+    text-align: center;
+    font-size: 1.7rem;
+    margin-bottom: 34px;
+  }
+
+  .story p {
+    max-width: 640px;
+    margin: 0 auto 18px;
+    text-align: center;
+    color: var(--text);
+    font-size: 1.05rem;
+  }
+
+  /* ── Features ── */
+  .features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 18px;
+  }
+  .feature {
+    border: 1px solid var(--border);
+    background: var(--bg-panel);
+    border-radius: 6px;
+    padding: 22px 20px;
+  }
+  .feature .icon { font-size: 1.6rem; margin-bottom: 10px; display: block; }
+  .feature h3 {
+    font-size: 0.88rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 8px;
+  }
+  .feature p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--text-dim);
+  }
+
+  /* ── Download ── */
+  .download {
+    text-align: center;
+  }
+  .download .platforms {
+    margin-top: 14px;
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    letter-spacing: 0.04em;
+  }
+  .download .note {
+    margin-top: 24px;
+    font-size: 0.82rem;
+    color: var(--text-dim);
+    max-width: 480px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  footer {
+    text-align: center;
+    padding: 40px 24px 60px;
+    color: var(--text-dim);
+    font-size: 0.8rem;
+  }
+  footer a { color: var(--text-dim); text-decoration: underline; }
+
+  @media (max-width: 560px) {
+    .hero { padding: 64px 0 40px; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="hero">
+    <div class="wrap">
+      <img src="assets/logo.png" alt="Relicário" />
+      <h1>Relicário</h1>
+      <p class="tagline">Um leitor de ebooks que transforma cada página virada em progresso. Grátis, offline, e seu pra sempre.</p>
+      <div class="cta-row">
+        <a class="btn" href="#baixar">Baixar grátis</a>
+        <a class="btn secondary" href="#historia">Conhecer a história</a>
+      </div>
+    </div>
+  </div>
+
+  <section id="historia">
+    <div class="wrap">
+      <p class="section-title">A origem</p>
+      <h2 class="section-heading">Por que o Relicário existe</h2>
+      <div class="story">
+        <p>Todo leitor já sentiu aquilo: terminar um livro e não ter nada pra mostrar além da lembrança. O Relicário nasceu pra mudar isso — cada sessão de leitura, cada anotação, cada livro concluído vira experiência de verdade, e seu progresso como leitor fica registrado como a ficha de um personagem.</p>
+        <p>Não é só uma camada de gamificação por cima de um leitor qualquer. É um grimório completo: biblioteca local, estatísticas reais do seu hábito de leitura, narração em voz alta pra quando os olhos cansam, e descoberta de livros de domínio público — tudo rodando inteiramente no seu dispositivo, sem depender de servidor nenhum pra funcionar.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <p class="section-title">O que você ganha</p>
+      <h2 class="section-heading">Recursos</h2>
+      <div class="features">
+        <div class="feature">
+          <span class="icon">📖</span>
+          <h3>Leitura imersiva</h3>
+          <p>EPUB e PDF, com temas, fontes ajustáveis, anotações, marcadores, busca no texto e dicionário integrado.</p>
+        </div>
+        <div class="feature">
+          <span class="icon">⚔️</span>
+          <h3>Progressão de personagem</h3>
+          <p>Ganhe XP ao ler, suba de nível, descubra sua classe de leitor e desbloqueie conquistas conforme seus hábitos de leitura.</p>
+        </div>
+        <div class="feature">
+          <span class="icon">🎙️</span>
+          <h3>O Bardo narra pra você</h3>
+          <p>Narração em voz alta com destaque de palavra por palavra, pra continuar a leitura sem olhar pra tela.</p>
+        </div>
+        <div class="feature">
+          <span class="icon">📊</span>
+          <h3>Estatísticas de verdade</h3>
+          <p>Heatmap de 12 meses, sequências de dias lidos, tempo por livro — veja seu hábito de leitura com dados reais.</p>
+        </div>
+        <div class="feature">
+          <span class="icon">🏛️</span>
+          <h3>Domínio público, de graça</h3>
+          <p>Descubra e baixe livros gratuitos direto do Project Gutenberg e do catálogo da Open Library, sem sair do app.</p>
+        </div>
+        <div class="feature">
+          <span class="icon">🔒</span>
+          <h3>Seus dados, seu controle</h3>
+          <p>Tudo funciona 100% offline. Backup opcional e manual no seu próprio Google Drive, quando você quiser.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="baixar" class="download">
+    <div class="wrap">
+      <p class="section-title">Comece agora</p>
+      <h2 class="section-heading">Baixe o Relicário</h2>
+      <a class="btn" href="https://github.com/caio10012/relicario-site/releases/latest">Baixar a versão mais recente</a>
+      <p class="platforms">Windows · macOS · Linux</p>
+      <p class="note">O Relicário é gratuito e de código aberto. Sem anúncios, sem conta obrigatória, sem assinatura.</p>
+    </div>
+  </section>
+
+  <footer>
+    <div class="divider" style="margin-bottom: 18px;"></div>
+    Feito por Caio Fontes.
+  </footer>
+
+</body>
+</html>
