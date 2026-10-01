@@ -338,6 +338,18 @@
     0%, 100% { box-shadow: 0 0 0 0 rgba(212,175,55,0.35); }
     50%      { box-shadow: 0 0 0 10px rgba(212,175,55,0); }
   }
+  .discovery-back {
+    display: none;
+    position: absolute; left: 16px; top: 16px; z-index: 11;
+    width: 40px; height: 40px; border-radius: 50%;
+    align-items: center; justify-content: center;
+    background: rgba(10,8,6,0.8);
+    border: 1.5px solid var(--gold);
+    color: var(--gold);
+    cursor: pointer;
+  }
+  .discovery-demo.is-active .discovery-back { display: flex; }
+  .discovery-back:hover { transform: scale(1.08); }
   .swipe-demo {
     display: none; flex-direction: column; align-items: center; gap: 16px;
     opacity: 0; transition: opacity 0.35s ease;
@@ -361,6 +373,11 @@
     background: #1a1410; display: flex; align-items: center; justify-content: center;
   }
   .swipe-card-cover svg { opacity: 0.5; }
+  .swipe-card-cover img { width: 100%; height: 100%; object-fit: cover; opacity: 0.92; }
+  .swipe-card-cover::after {
+    content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 30px;
+    background: linear-gradient(transparent, #2A241F);
+  }
   .swipe-card-banner {
     position: absolute; top: 0; left: 0; right: 0; padding: 5px 10px;
     background: linear-gradient(rgba(0,0,0,0.7), transparent);
@@ -620,6 +637,9 @@
           <img class="frame" src="assets/screenshot-descoberta.png" alt="Calabouço dos Tomos, com cartas de livros de domínio público pra descobrir" loading="lazy" />
           <button type="button" class="discovery-try" id="discovery-try" aria-label="Testar o saque de livros">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+          </button>
+          <button type="button" class="discovery-back" id="discovery-back" aria-label="Voltar pra imagem">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6" /></svg>
           </button>
           <div class="swipe-demo" id="swipe-demo">
             <div class="swipe-stack" id="swipe-stack"></div>
@@ -984,18 +1004,19 @@
     // da busca real. Fica escondida atrás da seta até alguém clicar nela.
     (function () {
       var BOOKS = [
-        { title: "Dom Quixote", author: "Miguel de Cervantes", desc: "Um fidalgo enlouquecido por romances de cavalaria sai pelo mundo em busca de aventuras imaginárias." },
-        { title: "Drácula", author: "Bram Stoker", desc: "Um conde da Transilvânia atravessa a Europa em busca de sangue novo." },
-        { title: "Frankenstein", author: "Mary Shelley", desc: "Um cientista dá vida a uma criatura que ele mesmo passa a temer." },
-        { title: "Orgulho e Preconceito", author: "Jane Austen", desc: "Cinco irmãs, um baile e os mal-entendidos que atrasam o amor." },
-        { title: "Moby Dick", author: "Herman Melville", desc: "A obsessão de um capitão por uma baleia branca que já lhe custou uma perna." },
-        { title: "A Odisseia", author: "Homero", desc: "Um herói tenta voltar pra casa, e os deuses não facilitam em nada." },
-        { title: "Grandes Esperanças", author: "Charles Dickens", desc: "Um órfão recebe uma fortuna misteriosa e descobre o preço dela." },
-        { title: "O Conde de Monte Cristo", author: "Alexandre Dumas", desc: "Um homem traído arquiteta, ano após ano, a vingança perfeita." },
+        { title: "Dom Quixote", author: "Miguel de Cervantes", isbn: "9780142437230", desc: "Um fidalgo enlouquecido por romances de cavalaria sai pelo mundo em busca de aventuras imaginárias." },
+        { title: "Drácula", author: "Bram Stoker", isbn: "9780141439846", desc: "Um conde da Transilvânia atravessa a Europa em busca de sangue novo." },
+        { title: "Frankenstein", author: "Mary Shelley", isbn: "9780141439471", desc: "Um cientista dá vida a uma criatura que ele mesmo passa a temer." },
+        { title: "Orgulho e Preconceito", author: "Jane Austen", isbn: "9780141439518", desc: "Cinco irmãs, um baile e os mal-entendidos que atrasam o amor." },
+        { title: "Moby Dick", author: "Herman Melville", isbn: "9780142437247", desc: "A obsessão de um capitão por uma baleia branca que já lhe custou uma perna." },
+        { title: "A Odisseia", author: "Homero", isbn: "9780140268867", desc: "Um herói tenta voltar pra casa, e os deuses não facilitam em nada." },
+        { title: "Grandes Esperanças", author: "Charles Dickens", isbn: "9780141439563", desc: "Um órfão recebe uma fortuna misteriosa e descobre o preço dela." },
+        { title: "O Conde de Monte Cristo", author: "Alexandre Dumas", isbn: "9780140449266", desc: "Um homem traído arquiteta, ano após ano, a vingança perfeita." },
       ];
 
       var demo    = document.getElementById("discovery-demo");
       var tryBtn  = document.getElementById("discovery-try");
+      var backBtn = document.getElementById("discovery-back");
       var stackEl = document.getElementById("swipe-stack");
       var countEl = document.getElementById("swipe-count");
       var fleeBtn = document.getElementById("swipe-flee");
@@ -1024,12 +1045,20 @@
 
         var cover = document.createElement("div");
         cover.className = "swipe-card-cover";
-        cover.innerHTML =
-          '<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#7a6a52" stroke-width="1.5" stroke-linecap="round">' +
-          '<path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>';
         var banner = document.createElement("div");
         banner.className = "swipe-card-banner";
         banner.textContent = "✦ RELÍQUIA DESCOBERTA ✦";
+        var coverImg = document.createElement("img");
+        coverImg.alt = book.title;
+        coverImg.draggable = false;
+        coverImg.src = "https://covers.openlibrary.org/b/isbn/" + book.isbn + "-M.jpg?default=false";
+        coverImg.onerror = function () {
+          cover.innerHTML =
+            '<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#7a6a52" stroke-width="1.5" stroke-linecap="round">' +
+            '<path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>';
+          cover.appendChild(banner);
+        };
+        cover.appendChild(coverImg);
         cover.appendChild(banner);
 
         var info = document.createElement("div");
@@ -1143,6 +1172,7 @@
         demo.classList.add("is-active");
         start();
       });
+      if (backBtn) backBtn.addEventListener("click", function () { demo.classList.remove("is-active"); });
       if (fleeBtn) fleeBtn.addEventListener("click", function () { swipe("left"); });
       if (lootBtn) lootBtn.addEventListener("click", function () { swipe("right"); });
     })();
