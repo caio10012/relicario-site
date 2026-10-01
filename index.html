@@ -319,6 +319,78 @@
   .heading-row { display: flex; align-items: center; gap: 14px; margin: 10px 0 14px; }
   .heading-row h3 { margin: 0; }
 
+  /* ── Demo de saque (Descoberta) — arrasta igual ao Calabouço dos Tomos ── */
+  .discovery-demo { position: relative; }
+  .discovery-demo.is-active .frame,
+  .discovery-demo.is-active .discovery-try { display: none; }
+  .discovery-try {
+    position: absolute; right: 16px; bottom: 16px;
+    width: 46px; height: 46px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(10,8,6,0.8);
+    border: 1.5px solid var(--gold);
+    color: var(--gold);
+    cursor: pointer;
+    animation: arrow-pulse 2.2s ease-in-out infinite;
+  }
+  .discovery-try:hover { transform: scale(1.08); }
+  @keyframes arrow-pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(212,175,55,0.35); }
+    50%      { box-shadow: 0 0 0 10px rgba(212,175,55,0); }
+  }
+  .swipe-demo {
+    display: none; flex-direction: column; align-items: center; gap: 16px;
+    opacity: 0; transition: opacity 0.35s ease;
+  }
+  .discovery-demo.is-active .swipe-demo { display: flex; opacity: 1; }
+  .swipe-stack { position: relative; width: 240px; height: 350px; }
+  .swipe-card {
+    position: absolute; inset: 0;
+    background: #2A241F;
+    border: 3px ridge #D4AF37;
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex; flex-direction: column;
+    user-select: none; touch-action: none;
+    box-shadow: 0 12px 34px rgba(0,0,0,0.55);
+    cursor: grab;
+  }
+  .swipe-card.dragging { cursor: grabbing; }
+  .swipe-card-cover {
+    width: 100%; height: 130px; flex-shrink: 0; position: relative;
+    background: #1a1410; display: flex; align-items: center; justify-content: center;
+  }
+  .swipe-card-cover svg { opacity: 0.5; }
+  .swipe-card-banner {
+    position: absolute; top: 0; left: 0; right: 0; padding: 5px 10px;
+    background: linear-gradient(rgba(0,0,0,0.7), transparent);
+    font-family: 'Cinzel', serif; font-size: 8px; color: #D4AF37;
+    letter-spacing: 0.14em; text-align: center;
+  }
+  .swipe-card-info { padding: 10px 14px 12px; display: flex; flex-direction: column; gap: 5px; flex: 1; overflow: hidden; }
+  .swipe-card-title { font-family: 'Cinzel', serif; color: #e8d5a3; font-weight: 700; font-size: 12.5px; line-height: 1.35; margin: 0; }
+  .swipe-card-author { color: #8a7a62; font-size: 10.5px; margin: 0; }
+  .swipe-card-desc { color: #6a5f4e; font-size: 10.5px; font-style: italic; line-height: 1.5; margin: 2px 0 0; }
+  .swipe-overlay {
+    position: absolute; inset: 0; border-radius: 8px;
+    display: flex; align-items: center; padding: 0 16px;
+    opacity: 0; pointer-events: none;
+  }
+  .swipe-overlay.right { justify-content: flex-end; background: linear-gradient(135deg, rgba(46,180,74,0.2), transparent); border: 3px solid rgba(46,200,74,0.65); }
+  .swipe-overlay.left  { justify-content: flex-start; background: linear-gradient(225deg, rgba(200,50,50,0.2), transparent); border: 3px solid rgba(200,50,50,0.65); }
+  .swipe-overlay span { font-family: 'Cinzel', serif; font-size: 17px; font-weight: 700; letter-spacing: 0.08em; }
+  .swipe-overlay.right span { color: rgba(50,220,80,0.95); display: inline-block; transform: rotate(-14deg); text-shadow: 0 0 18px rgba(50,220,80,0.7); }
+  .swipe-overlay.left span  { color: rgba(220,70,70,0.95); display: inline-block; transform: rotate(14deg);  text-shadow: 0 0 18px rgba(220,70,70,0.7); }
+  .swipe-controls { display: flex; gap: 10px; width: 240px; }
+  .swipe-btn {
+    flex: 1; font-family: 'Cinzel', serif; font-size: 10.5px; letter-spacing: 0.08em;
+    padding: 9px 0; cursor: pointer;
+    clip-path: polygon(8px 0%, calc(100% - 8px) 0%, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0% calc(100% - 8px), 0% 8px);
+  }
+  .swipe-btn-left  { color: #c07070; background: linear-gradient(180deg,#2e1a1a,#1e0f0f,#2e1a1a); border: 1px solid #6a3030; }
+  .swipe-btn-right { color: #70c070; background: linear-gradient(180deg,#1a2e1a,#0f1e0f,#1a2e1a); border: 1px solid #306a30; }
+  .swipe-count { font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: 0.1em; color: var(--text-dim); opacity: 0.6; margin: 0; }
+
   /* ── Constelação (seção "também vem junto") ── */
   .constellation { display: block; width: 100%; height: auto; margin: 0 auto; opacity: 0.9; cursor: crosshair; }
   .constellation .star { opacity: 0; transform-box: fill-box; transform-origin: center; }
@@ -544,7 +616,20 @@
         <p>Explore o Calabouço dos Tomos: arraste pra descobrir livros de domínio público do Project Gutenberg e da Open Library, por gênero ou em alta no momento. Encontrou algo bom? Saqueie e já cai na sua biblioteca.</p>
       </div>
       <div class="feature-row-shot">
-        <img class="frame" src="assets/screenshot-descoberta.png" alt="Calabouço dos Tomos, com cartas de livros de domínio público pra descobrir" loading="lazy" />
+        <div class="discovery-demo" id="discovery-demo">
+          <img class="frame" src="assets/screenshot-descoberta.png" alt="Calabouço dos Tomos, com cartas de livros de domínio público pra descobrir" loading="lazy" />
+          <button type="button" class="discovery-try" id="discovery-try" aria-label="Testar o saque de livros">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+          </button>
+          <div class="swipe-demo" id="swipe-demo">
+            <div class="swipe-stack" id="swipe-stack"></div>
+            <div class="swipe-controls">
+              <button type="button" class="swipe-btn swipe-btn-left" id="swipe-flee">← Fugir</button>
+              <button type="button" class="swipe-btn swipe-btn-right" id="swipe-loot">Saquear ⚔</button>
+            </div>
+            <p class="swipe-count" id="swipe-count"></p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -892,6 +977,174 @@
         .catch(function () {
           // Sem sorte na API, o botão continua com o link padrão de /releases/latest.
         });
+    })();
+
+    // Demo de saque: mesma mecânica de arrastar do Calabouço dos Tomos
+    // (DiscoveryPage.tsx), com livros de domínio público conhecidos no lugar
+    // da busca real. Fica escondida atrás da seta até alguém clicar nela.
+    (function () {
+      var BOOKS = [
+        { title: "Dom Quixote", author: "Miguel de Cervantes", desc: "Um fidalgo enlouquecido por romances de cavalaria sai pelo mundo em busca de aventuras imaginárias." },
+        { title: "Drácula", author: "Bram Stoker", desc: "Um conde da Transilvânia atravessa a Europa em busca de sangue novo." },
+        { title: "Frankenstein", author: "Mary Shelley", desc: "Um cientista dá vida a uma criatura que ele mesmo passa a temer." },
+        { title: "Orgulho e Preconceito", author: "Jane Austen", desc: "Cinco irmãs, um baile e os mal-entendidos que atrasam o amor." },
+        { title: "Moby Dick", author: "Herman Melville", desc: "A obsessão de um capitão por uma baleia branca que já lhe custou uma perna." },
+        { title: "A Odisseia", author: "Homero", desc: "Um herói tenta voltar pra casa, e os deuses não facilitam em nada." },
+        { title: "Grandes Esperanças", author: "Charles Dickens", desc: "Um órfão recebe uma fortuna misteriosa e descobre o preço dela." },
+        { title: "O Conde de Monte Cristo", author: "Alexandre Dumas", desc: "Um homem traído arquiteta, ano após ano, a vingança perfeita." },
+      ];
+
+      var demo    = document.getElementById("discovery-demo");
+      var tryBtn  = document.getElementById("discovery-try");
+      var stackEl = document.getElementById("swipe-stack");
+      var countEl = document.getElementById("swipe-count");
+      var fleeBtn = document.getElementById("swipe-flee");
+      var lootBtn = document.getElementById("swipe-loot");
+      if (!demo || !tryBtn || !stackEl) return;
+
+      var deck = [];
+      var started = false;
+      var swiping = false;
+
+      function shuffle(arr) {
+        for (var i = arr.length - 1; i > 0; i--) {
+          var j = Math.floor(Math.random() * (i + 1));
+          var tmp = arr[i]; arr[i] = arr[j]; arr[j] = tmp;
+        }
+        return arr;
+      }
+
+      function buildCard(book, stackOffset) {
+        var card = document.createElement("div");
+        card.className = "swipe-card";
+        card.style.zIndex = String(10 - stackOffset);
+        var scale = stackOffset === 0 ? 1 : stackOffset === 1 ? 0.96 : 0.92;
+        var ty    = stackOffset === 0 ? 0 : stackOffset === 1 ? 12 : 24;
+        card.style.transform = "translateY(" + ty + "px) scale(" + scale + ")";
+
+        var cover = document.createElement("div");
+        cover.className = "swipe-card-cover";
+        cover.innerHTML =
+          '<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#7a6a52" stroke-width="1.5" stroke-linecap="round">' +
+          '<path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>';
+        var banner = document.createElement("div");
+        banner.className = "swipe-card-banner";
+        banner.textContent = "✦ RELÍQUIA DESCOBERTA ✦";
+        cover.appendChild(banner);
+
+        var info = document.createElement("div");
+        info.className = "swipe-card-info";
+        var title = document.createElement("p");
+        title.className = "swipe-card-title";
+        title.textContent = book.title;
+        var author = document.createElement("p");
+        author.className = "swipe-card-author";
+        author.textContent = book.author;
+        var desc = document.createElement("p");
+        desc.className = "swipe-card-desc";
+        desc.textContent = book.desc;
+        info.appendChild(title);
+        info.appendChild(author);
+        info.appendChild(desc);
+
+        var overlayRight = document.createElement("div");
+        overlayRight.className = "swipe-overlay right";
+        overlayRight.innerHTML = "<span>SAQUEAR</span>";
+        var overlayLeft = document.createElement("div");
+        overlayLeft.className = "swipe-overlay left";
+        overlayLeft.innerHTML = "<span>FUGIR</span>";
+
+        card.appendChild(cover);
+        card.appendChild(info);
+        card.appendChild(overlayRight);
+        card.appendChild(overlayLeft);
+
+        if (stackOffset === 0) bindDrag(card, overlayLeft, overlayRight);
+        return card;
+      }
+
+      function bindDrag(card, overlayLeft, overlayRight) {
+        var THRESHOLD = 70;
+        var startX = 0, startY = 0, dx = 0, dy = 0, dragging = false;
+
+        card.addEventListener("pointerdown", function (e) {
+          if (swiping) return;
+          startX = e.clientX; startY = e.clientY;
+          dx = 0; dy = 0; dragging = true;
+          card.classList.add("dragging");
+          card.style.transition = "none";
+          card.setPointerCapture(e.pointerId);
+        });
+        card.addEventListener("pointermove", function (e) {
+          if (!dragging) return;
+          dx = e.clientX - startX;
+          dy = (e.clientY - startY) * 0.25;
+          card.style.transform = "translateX(" + dx + "px) translateY(" + dy + "px) rotate(" + (dx * 0.06) + "deg)";
+          var alpha = Math.min(Math.abs(dx) / THRESHOLD, 1) * 0.85;
+          overlayRight.style.opacity = dx > 20 ? String(alpha) : "0";
+          overlayLeft.style.opacity  = dx < -20 ? String(alpha) : "0";
+        });
+        function release() {
+          if (!dragging) return;
+          dragging = false;
+          card.classList.remove("dragging");
+          if (Math.abs(dx) >= THRESHOLD) {
+            swipe(dx > 0 ? "right" : "left");
+          } else {
+            card.style.transition = "transform 0.25s ease";
+            card.style.transform = "translateY(0px) scale(1)";
+            overlayLeft.style.opacity = "0";
+            overlayRight.style.opacity = "0";
+          }
+        }
+        card.addEventListener("pointerup", release);
+        card.addEventListener("pointercancel", release);
+      }
+
+      function countLabel() {
+        return deck.length === 1 ? "1 tomo restante" : deck.length + " tomos restantes";
+      }
+
+      function renderStack() {
+        stackEl.innerHTML = "";
+        deck.slice(0, 3).forEach(function (book, i) {
+          stackEl.appendChild(buildCard(book, i));
+        });
+        if (countEl) countEl.textContent = countLabel();
+      }
+
+      function swipe(dir) {
+        if (swiping || !deck.length) return;
+        swiping = true;
+        var topCard = stackEl.firstElementChild;
+        if (topCard) {
+          topCard.style.transition = "transform 0.38s ease";
+          topCard.style.transform = "translateX(" + (dir === "right" ? 160 : -160) + "%) rotate(" + (dir === "right" ? 22 : -22) + "deg)";
+          topCard.style.pointerEvents = "none";
+          var ov = topCard.querySelector(dir === "right" ? ".swipe-overlay.right" : ".swipe-overlay.left");
+          if (ov) ov.style.opacity = "0.9";
+        }
+        setTimeout(function () {
+          deck.shift();
+          if (!deck.length) deck = shuffle(BOOKS.slice());
+          swiping = false;
+          renderStack();
+        }, 400);
+      }
+
+      function start() {
+        if (started) return;
+        started = true;
+        deck = shuffle(BOOKS.slice());
+        renderStack();
+      }
+
+      tryBtn.addEventListener("click", function () {
+        demo.classList.add("is-active");
+        start();
+      });
+      if (fleeBtn) fleeBtn.addEventListener("click", function () { swipe("left"); });
+      if (lootBtn) lootBtn.addEventListener("click", function () { swipe("right"); });
     })();
   </script>
 
